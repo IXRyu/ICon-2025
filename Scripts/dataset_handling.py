@@ -10,14 +10,14 @@ def load_data(file_path):
 def augment_dataset(df):
     columns_to_scale = ['mean_radius', 'mean_smoothness', 'mean_perimeter', 'mean_area', 'mean_texture']
     
-    scaling_factors = np.linspace(1.1, 2.0, num=5) 
+    scaling_factors = np.linspace(1.1, 2.0, num=100) 
     df_combined = df.copy()
     for factor in scaling_factors:
         df_augmented = df.copy()
         for column in columns_to_scale:
             df_augmented[column] = df_augmented[column] * factor 
         df_combined = pd.concat([df_combined, df_augmented], axis=0, ignore_index=True)
-    df_combined.to_csv('./dataset/augmented_data.csv', index=False)
+    df_combined.to_csv('./dataset/neural_data.csv', index=False)
     return df_combined
     
     

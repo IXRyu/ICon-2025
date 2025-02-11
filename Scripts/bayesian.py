@@ -47,8 +47,8 @@ def bayesian_classifier():
 
 
     dataset = dataset.round(0) # Ho provato a discretizzare i dati ma comunque non ne ho la RAM sufficiente
-    model = define_bayesian_network()
-    #model = learn_structure(dataset)
+    #model = define_bayesian_network()
+    model = learn_structure(dataset)
     model = learn_parameters(model, dataset)
     plot_bayesian(model)
 

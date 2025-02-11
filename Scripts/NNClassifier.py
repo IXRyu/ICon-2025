@@ -24,7 +24,7 @@ class NeuralNetwork(nn.Module):
         x = torch.sigmoid(self.output(x))  # Uscita con sigmoid per la classificazione binaria
         return x
 
-def Training_Prediction(X_train, y_train, X_test, y_test, epochs=5, patience=2, batch_size=32, lr=0.001, dropout_rate=0.5):
+def Training_Prediction(X_train, y_train, X_test, y_test, epochs=100, patience=5, batch_size=64, lr=0.001, dropout_rate=0.5):
     # Normalizzazione dei dati
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
@@ -100,9 +100,9 @@ def Training_Prediction(X_train, y_train, X_test, y_test, epochs=5, patience=2, 
         val_loss_history.append(val_loss)
 
         # Controlla se applicare Early Stopping
-        if early_stopping(patience, val_loss_history):
+        '''if early_stopping(patience, val_loss_history):
             print("Early stopping triggered!")
-            break
+            break'''
 
     test_accuracy, test_precision, test_recall, test_f1 = compute_metrics(X_test_tensor, y_test_tensor)
     return {
@@ -117,7 +117,7 @@ def Training_Prediction(X_train, y_train, X_test, y_test, epochs=5, patience=2, 
     }
 
 def NeuralClassifier(X_train, y_train, X_test , y_test):
-    results = Training_Prediction(X_train, y_train, X_test, y_test, epochs=5, patience=2)
+    results = Training_Prediction(X_train, y_train, X_test, y_test, epochs=100, patience=5)
     print(f"Test Accuracy: {results['test_metrics']['accuracy']:.8f}")
     print(f"Test Precision: {results['test_metrics']['precision']:.8f}")
     print(f"Test Recall: {results['test_metrics']['recall']:.8f}")
