@@ -2,7 +2,21 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, roc_curve, auc, precision_recall_curve, average_precision_score, precision_score, recall_score, f1_score, accuracy_score
 from sklearn.model_selection import learning_curve
-import numpy as np
+import networkx as nx
+
+def plot_dataset(df):
+    sns.set(style="whitegrid")
+    columns_to_plot = ['mean_radius', 'mean_texture', 'mean_area', 'mean_perimeter', 'mean_smoothness']
+
+    correlation_matrix = df[columns_to_plot].corr()
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+    plt.title("Correlation Matrix")
+    plt.show()
+
+    sns.pairplot(df[columns_to_plot + ['diagnosis']], hue="diagnosis", palette="Set1")
+    plt.suptitle("Pairplot of Features Colored by Diagnosis", y=1.02)
+    plt.show()
 
 def plot_training_report(model, X_train, y_train, model_name):
     y_train_pred = model.predict(X_train)
@@ -129,11 +143,72 @@ def plot_learning_curve(model, X, y, model_name):
         plt.legend(loc="best")
         plt.grid()
 
-        
-
         plt.subplot(2, 3, i + 4)
         plt.axis('tight')
         plt.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_bayesian(model):
+    G = nx.DiGraph()
+    for edge in model.edges():
+        G.add_edge(edge[0], edge[1])
+
+    plt.figure(figsize=(10, 8))
+    pos = nx.spring_layout(G, seed=42)
+    nx.draw(G, pos, with_labels=True, node_size=7000, node_color='purple', font_size=12, font_weight='bold', arrows=True)
+    plt.title("Learned Bayesian Network")
+    plt.show()
+
+def plot_NN_curves(history):
+    epochs = range(1, len(history['accuracy']) + 1)
+    
+    plt.figure(figsize=(12, 10))
+    
+    # Accuracy
+    plt.subplot(2, 2, 1)
+    accuracy_train_line, = plt.plot(epochs, history['accuracy'], label='Training Accuracy', color='b')
+    plt.scatter(epochs, history['accuracy'], color=accuracy_train_line.get_color(), marker='o') 
+    accuracy_val_line, = plt.plot(epochs, history['val_accuracy'], label='Validation Accuracy', color='r')
+    plt.scatter(epochs, history['val_accuracy'], color=accuracy_val_line.get_color(), marker='o')  
+    plt.title('Accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.legend()
+
+    # Precision
+    plt.subplot(2, 2, 2)
+    precision_train_line, = plt.plot(epochs, history['precision'], label='Training Precision', color='g')
+    plt.scatter(epochs, history['precision'], color=precision_train_line.get_color(), marker='o')  
+    precision_val_line, = plt.plot(epochs, history['val_precision'], label='Validation Precision', color='orange')
+    plt.scatter(epochs, history['val_precision'], color=precision_val_line.get_color(), marker='o')  
+    plt.title('Precision')
+    plt.xlabel('Epochs')
+    plt.ylabel('Precision')
+    plt.legend()
+
+    # Recall
+    plt.subplot(2, 2, 3)
+    recall_train_line, = plt.plot(epochs, history['recall'], label='Training Recall', color='purple')
+    plt.scatter(epochs, history['recall'], color=recall_train_line.get_color(), marker='o')  
+    recall_val_line, = plt.plot(epochs, history['val_recall'], label='Validation Recall', color='black')
+    plt.scatter(epochs, history['val_recall'], color=recall_val_line.get_color(), marker='o') 
+    plt.title('Recall')
+    plt.xlabel('Epochs')
+    plt.ylabel('Recall')
+    plt.legend()
+
+    # F1-Score
+    plt.subplot(2, 2, 4)
+    f1_train_line, = plt.plot(epochs, history['f1'], label='Training F1-Score', color='brown')
+    plt.scatter(epochs, history['f1'], color=f1_train_line.get_color(), marker='o') 
+    f1_val_line, = plt.plot(epochs, history['val_f1'], label='Validation F1-Score', color='cyan')
+    plt.scatter(epochs, history['val_f1'], color=f1_val_line.get_color(), marker='o') 
+    plt.title('F1-Score')
+    plt.xlabel('Epochs')
+    plt.ylabel('F1-Score')
+    plt.legend()
 
     plt.tight_layout()
     plt.show()

@@ -1,17 +1,19 @@
 from pgmpy.models import BayesianNetwork
 from pgmpy.estimators import HillClimbSearch, K2Score, MaximumLikelihoodEstimator
-from dataset_handling import parting
-import networkx as nx
 import pandas as pd
 from matplotlib import pyplot as plt
+from sklearn.preprocessing import KBinsDiscretizer
+from plotter import plot_bayesian
+
+from dataset_handling import parting
 
 def define_bayesian_network():
     model = BayesianNetwork([
-        ('mean_radius', 'mean_area'),
+        ('mean_radius', 'mean_perimeter'),
         ('mean_smoothness', 'diagnosis'),
         ('mean_texture', 'diagnosis'),
-        ('mean_radius', 'mean_perimeter'),
-        ('mean_area', 'mean_perimeter'),
+
+        ('mean_perimeter', 'mean_area'),
         ('mean_radius', 'diagnosis'),
         ('mean_area', 'diagnosis'),
         ('mean_perimeter', 'diagnosis')
@@ -34,33 +36,29 @@ def random_samples(model, num_samples):
     print("Diagnosis counts:\n", diagnosis_counts)
     return samples
 
-def plot(model):
-    G = nx.DiGraph()
-    for edge in model.edges():
-        G.add_edge(edge[0], edge[1])
-
-    plt.figure(figsize=(10, 8))
-    pos = nx.spring_layout(G, seed=42)
-    nx.draw(G, pos, with_labels=True, node_size=7000, node_color='purple', font_size=12, font_weight='bold', arrows=True)
-    plt.title("Learned Bayesian Network")
-    plt.show()
-
 def bayesian_classifier():
-    dataset = parting('dataset/Breast_cancer_data.csv')
+    dataset = parting('./dataset/Breast_cancer_data.csv')
     dataset = dataset.dropna()
-    dataset = dataset.round(0)
+    #discretizzo il dataset
+
+    '''discretizer = KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='uniform')
+    continuous_columns = ['mean_smoothness']
+    dataset[continuous_columns] = discretizer.fit_transform(dataset[continuous_columns])'''
+
+
+    dataset = dataset.round(0) # Ho provato a discretizzare i dati ma comunque non ne ho la RAM sufficiente
     model = define_bayesian_network()
     #model = learn_structure(dataset)
     model = learn_parameters(model, dataset)
-    plot(model)
+    plot_bayesian(model)
 
-    samples = random_samples(model, num_samples=1000)
+    samples = random_samples(model, num_samples=100)
     print("Random samples:\n", samples)
 
     to_predict = pd.DataFrame({
-        'mean_radius': [13,20,15,10,18],
-        'mean_perimeter': [120,85,97,70,100],
-        'mean_texture': [20,25,27,15,30],
+        'mean_radius': [13, 20,15],
+        'mean_perimeter': [120, 85, 97],
+        'mean_texture': [13, 23, 15],
     })
 
     agent = model.predict(to_predict)

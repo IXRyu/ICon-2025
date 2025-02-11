@@ -6,15 +6,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
-
 from plotter import plot_test_report, plot_training_report, plot_learning_curve
-from dataset_handling import pre_processing
 
 def get_parameters():
     return {
         'Decision_Tree': {
             'criterion': ['gini', 'entropy', 'log_loss'],
-            'max_depth': [5, 10, 15],
+            'max_depth': [5, 10],
             'min_samples_split': [2, 5, 10],
         },
         'Random_Forest': {
@@ -23,13 +21,13 @@ def get_parameters():
             'min_samples_split': [2, 5, 10],
         },
         'Logistic_Regression': {
-            'penalty': ['l2'],
-            'C': [0.001, 0.01, 0.1, 1, 10],
+            'penalty': ['l1','l2'],
+            'C': [0.001, 0.01, 0.1],
             'solver': ['liblinear'],
             'max_iter': [100000, 150000],
         },
         'SVM': {
-            'C': [0.1, 0.5, 1, 2],
+            'C': [0.01, 0.1, 1],
             'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
             'gamma': ['scale', 'auto'],
         },
@@ -52,8 +50,8 @@ def init_models():
     }
 
 def cross_validation(name, model, x_train, y_train, params):
-    x_train_half, _, y_train_half, _ = train_test_split(x_train, y_train, test_size=0.85, random_state=42)
-    grid_search = GridSearchCV(estimator=model, param_grid=params, cv=5, n_jobs=-1, verbose=0)
+    x_train_half, _, y_train_half, _ = train_test_split(x_train, y_train, test_size=0.6, random_state=42)
+    grid_search = GridSearchCV(estimator=model, param_grid=params, cv=10, n_jobs=-1, verbose=0)
     grid_search.fit(x_train_half, y_train_half)
     print(f"Best parameters for {name}: {grid_search.best_params_}")
     print(f"Validation accuracy for {name}: {grid_search.best_score_:.4f}\n")
