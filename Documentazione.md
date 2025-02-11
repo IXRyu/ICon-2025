@@ -3,7 +3,9 @@
 ## Autore
 [Fabio Zippo](https://github.com/IXRyu) - MAT 776951 
 
-email: fabiozippo03@hotmail.com
+email: f.zippo3@studenti.uniba.it
+
+Anno: 2024/25
 
 Occupazione: Studente presso l'Università degli Studi di Bari [Aldo Moro](https://www.uniba.it/it)
 
