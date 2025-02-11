@@ -249,8 +249,6 @@ Per ogni modello si andrà a mostrare:
 
 ### Performance Evaluation
 
-![Matrice](./img/Supervisionato/DT/DT_Matrice.png)
-
 ![Metriche](./img/Supervisionato/DT/DT_Metriche.png)
 
 ![ROC](./img/Supervisionato/DT/DT_ROC.png)
@@ -278,8 +276,6 @@ Per ogni modello si andrà a mostrare:
 **Migliori parametri trovati:** {'max_depth': 20, 'min_samples_split': 5, 'n_estimators': 25}
 
 ### Performance Evaluation
-
-![Matrice](./img/Supervisionato/RF/RF_Matrice.png)
 
 ![Metriche](./img/Supervisionato/RF/RF_Metriche.png)
 
@@ -314,8 +310,6 @@ Per ogni modello si andrà a mostrare:
 
 ### Performance Evaluation
 
-![Matrice](./img/Supervisionato/LR/LR_Matrice.png)
-
 ![Metriche](./img/Supervisionato/LR/LR_Metriche.png)
 
 ![ROC](./img/Supervisionato/LR/LR_ROC.png)
@@ -349,8 +343,6 @@ Per ogni modello si andrà a mostrare:
 
 ### Performance Evaluation
 
-![Matrice](./img/Supervisionato/SVM/SVM_Matrice.png)
-
 ![Metriche](./img/Supervisionato/SVM/SVM_Metriche.png)
 
 ![Learning Curve](./img/Supervisionato/SVM/SVM_LCurve.png)
@@ -380,9 +372,6 @@ Per ogni modello si andrà a mostrare:
 
 
 ### Performance Evaluation
-
-
-![Matrice](./img/Supervisionato/KNN/KNN_Matrice.png)
 
 ![Metriche](./img/Supervisionato/KNN/KNN_Metriche.png)
 
